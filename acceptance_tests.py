@@ -1,38 +1,55 @@
-import responses
-import pytest
-from github_action_runner.github_client import GitHubClient
+import subprocess
+import sys
 
-MOCK_WORKFLOWS = {
-    "workflows": [
-        {"name": "test_workflow", "id": 1},
-        {"name": "build_workflow", "id": 2}
-    ]
-}
+def test_criterion_1_cli_entry_point():
+    result = subprocess.run(
+        [sys.executable, "-m", "github_action_runner", "run", "https://github.com/example/repo", "workflow.yml", "--dry-run"],
+        cwd="/workspace/projects/GitHubActionRunner",
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode == 0
 
-class TestGitHubClient:
-    @responses.activate
-    def test_list_workflows(self):
-        url = "https://api.github.com/repos/owner/repo/actions/workflows"
-        responses.add(
-            responses.GET, 
-            url, 
-            json=MOCK_WORKFLOWS, 
-            status=200
-        )
-        client = GitHubClient(token="fake_token")
-        workflows = client.list_workflows("owner/repo")
-        assert len(workflows) == 2
-        assert workflows[0]['name'] == "test_workflow"
+def test_criterion_2_parses_repo_url():
+    result = subprocess.run(
+        [sys.executable, "-m", "github_action_runner", "run", "https://github.com/test/repo", "workflow.yml"],
+        cwd="/workspace/projects/GitHubActionRunner",
+        capture_output=True,
+        text=True
+    )
+    assert "https://github.com/test/repo" in result.stdout
 
-    @responses.activate
-    def test_trigger_workflow(self):
-        url = "https://api.github.com/repos/owner/repo/actions/workflows/build_workflow/dispatch"
-        responses.add(
-            responses.POST, 
-            url, 
-            json={"id": 123}, 
-            status=204
-        )
-        client = GitHubClient(token="fake_token")
-        result = client.trigger_workflow("owner/repo", "build_workflow")
-        assert result == {"id": 123}
+def test_criterion_3_parses_workflow_name():
+    result = subprocess.run(
+        [sys.executable, "-m", "github_action_runner", "run", "https://github.com/test/repo", "my_workflow.yml"],
+        cwd="/workspace/projects/GitHubActionRunner",
+        capture_output=True,
+        text=True
+    )
+    assert "my_workflow.yml" in result.stdout
+
+def test_criterion_4_parses_dry_run_flag():
+    result = subprocess.run(
+        [sys.executable, "-m", "github_action_runner", "run", "https://github.com/test/repo", "workflow.yml", "--dry-run"],
+        cwd="/workspace/projects/GitHubActionRunner",
+        capture_output=True,
+        text=True
+    )
+    assert "Dry Run: True" in result.stdout
+
+def test_criterion_5_placeholder_functions():
+    result = subprocess.run(
+        [sys.executable, "-m", "github_action_runner", "run", "https://github.com/test/repo", "workflow.yml"],
+        cwd="/workspace/projects/GitHubActionRunner",
+        capture_output=True,
+        text=True
+    )
+    assert "[Placeholder] Listing workflows" in result.stdout
+    assert "[Placeholder] Running workflow" in result.stdout
+    assert "[Placeholder] Managing workflow" in result.stdout
+
+def test_criterion_6_project_structure_valid():
+    import os
+    assert os.path.exists("/workspace/projects/GitHubActionRunner/github_action_runner/__init__.py")
+    assert os.path.exists("/workspace/projects/GitHubActionRunner/github_action_runner/__main__.py")
+    assert os.path.exists("/workspace/projects/GitHubActionRunner/github_action_runner/cli.py")

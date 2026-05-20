@@ -1,30 +1,27 @@
 import click
-from github_action_runner.github_client import GitHubClient
 
-@click.group()
-def cli():
-    """GitHubActionRunner CLI entry point."""
-    pass
+@click.command()
+@click.argument("repo_url")
+@click.argument("workflow_name")
+@click.option("--dry-run", is_flag=True, help="Run in dry-run mode")
+def run(repo_url, workflow_name, dry_run):
+    \"\"\"GitHubActionRunner CLI entry point.\"\"\"
+    click.echo(f"Repository URL: {repo_url}")
+    click.echo(f"Workflow Name: {workflow_name}")
+    click.echo(f"Dry Run: {dry_run}")
+    
+    list_workflows(repo_url)
+    run_workflow(repo_url, workflow_name, dry_run)
+    manage_workflows(repo_url, workflow_name)
 
-@cli.command()
-@click.option('--repo', required=True, help='Repository URL')
-@click.option('--token', help='GitHub Token')
-def list_workflows(repo, token):
-    """List workflows for a repository."""
-    client = GitHubClient(token)
-    workflows = client.list_workflows(repo)
-    for wf in workflows:
-        click.echo(wf['name'])
+def list_workflows(repo_url):
+    \"\"\"Placeholder function for listing workflows.\"\"\"
+    click.echo(f"[Placeholder] Listing workflows for {repo_url}")
 
-@cli.command()
-@click.option('--repo', required=True, help='Repository URL')
-@click.option('--workflow', required=True, help='Workflow name')
-@click.option('--token', help='GitHub Token')
-def run_workflow(repo, workflow, token):
-    """Run a workflow."""
-    client = GitHubClient(token)
-    client.trigger_workflow(repo, workflow)
-    click.echo(f"Workflow {workflow} triggered for {repo}")
+def run_workflow(repo_url, workflow_name, dry_run):
+    \"\"\"Placeholder function for running workflows.\"\"\"
+    click.echo(f"[Placeholder] Running workflow {workflow_name} for {repo_url} (dry_run={dry_run})")
 
-if __name__ == "__main__":
-    cli()
+def manage_workflows(repo_url, workflow_name):
+    \"\"\"Placeholder function for managing workflows.\"\"\"
+    click.echo(f"[Placeholder] Managing workflow {workflow_name} for {repo_url}")
