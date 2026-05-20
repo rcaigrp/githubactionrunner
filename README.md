@@ -20,4 +20,4 @@ pip install click
 python -m github_action_runner run https://github.com/example/repo workflow.yml --dry-run
 
 ## Status
-✅ COMPLETE - All acceptance criteria met and tests passing.
+✅ IN PROGRESS - Awaiting final acceptance tests and validation.

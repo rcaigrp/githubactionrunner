@@ -1,32 +1,35 @@
 import click
 
-@click.group()
-def cli():
-    """GitHub Action Runner CLI for managing workflows."""
-    pass
+def list_workflows(repo_url):
+    """Placeholder function for listing workflows."""
+    click.echo(f'Listing workflows for {repo_url}...')
 
-@cli.command()
-@click.argument('repo_url')
-@click.argument('workflow_name')
-@click.option('--dry-run', is_flag=True, help='Simulate execution without running')
-def run(repo_url, workflow_name, dry_run):
-    """Run a GitHub Action workflow."""
-    click.echo(f"Running workflow '{workflow_name}' for repository '{repo_url}'")
-    if dry_run:
-        click.echo("[DRY-RUN] Simulation mode enabled.")
+def run_workflow(repo_url, workflow_name, dry_run):
+    """Placeholder function for running workflows."""
+    mode = 'Dry-run' if dry_run else 'Live'
+    click.echo(f'Running workflow {workflow_name} in {mode} mode for {repo_url}...')
+
+def manage_workflow(repo_url, workflow_name):
+    """Placeholder function for managing workflows."""
+    click.echo(f'Managing workflow {workflow_name} for {repo_url}...')
+
+@click.command()
+@click.argument('repo_url', required=False)
+@click.argument('workflow_name', required=False)
+@click.option('--dry-run', is_flag=True, help='Run in dry-run mode')
+def main(repo_url, workflow_name, dry_run):
+    """GitHubActionRunner CLI entry point."""
+    if not repo_url and not workflow_name:
+        click.echo('Usage: github_action_runner <repo_url> <workflow_name> [--dry-run]')
+        return
+    
+    click.echo(f'Parsed repo: {repo_url}')
+    click.echo(f'Parsed workflow: {workflow_name}')
+    click.echo(f'Dry-run: {dry_run}')
     
     list_workflows(repo_url)
-    run_workflow(repo_url, workflow_name)
-    manage_workflows(repo_url, workflow_name)
+    run_workflow(repo_url, workflow_name, dry_run)
+    manage_workflow(repo_url, workflow_name)
 
-def list_workflows(repo_url):
-    """List workflows for a repository."""
-    click.echo(f"  - Listing workflows for {repo_url}...")
-
-def run_workflow(repo_url, workflow_name):
-    """Run a specific workflow."""
-    click.echo(f"  - Running workflow '{workflow_name}'...")
-
-def manage_workflows(repo_url, workflow_name):
-    """Manage workflows for a repository."""
-    click.echo(f"  - Managing workflows for {repo_url}...")
+if __name__ == '__main__':
+    main()
