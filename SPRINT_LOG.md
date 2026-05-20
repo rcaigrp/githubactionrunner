@@ -27,3 +27,7 @@ Fixing case sensitivity in imports (GitHubActionRunner vs github_action_runner),
 ## Turn 6 — Craft (2026-05-20 17:16 UTC)
 
 Rewrote github_action_runner to use requests for API calls and click for CLI. Created acceptance_tests.py using responses to mock GitHub API. This separates logic from CLI and ensures tests don't make real HTTP calls.
+
+## Turn 1 — Manager (2026-05-20 19:44 UTC)
+
+
