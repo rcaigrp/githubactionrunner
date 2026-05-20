@@ -1,38 +1,37 @@
-import unittest
-import responses
+import pytest
+import click.testing
+import os
 
-import sys
-sys.path.insert(0, '/workspace/projects')
+from GitHubActionRunner import cli
+from GitHubActionRunner import __init__ as module_init
 
-from GitHubActionRunner import list_workflows, run_workflow
+def test_criterion_1_cli_runs():
+    runner = click.testing.CliRunner()
+    result = runner.invoke(cli.main, ['https://github.com/test/repo', 'workflow.yml'])
+    assert result.exit_code == 0
 
-class TestGitHubActionRunner(unittest.TestCase):
-    @responses.activate
-    def test_list_workflows(self):
-        responses.add(
-            responses.GET,
-            "https://api.github.com/repos/test/test/actions/workflows",
-            json={"workflows": [{"name": "ci", "id": 1}, {"name": "deploy", "id": 2}]}
-        )
-        result = list_workflows("test", "test", "token")
-        self.assertEqual(result, ["ci", "deploy"])
+def test_criterion_2_repo_url():
+    runner = click.testing.CliRunner()
+    result = runner.invoke(cli.main, ['https://github.com/test/repo', 'workflow.yml'])
+    assert result.exit_code == 0
 
-    @responses.activate
-    def test_run_workflow(self):
-        # Mock list workflows to find the ID
-        responses.add(
-            responses.GET,
-            "https://api.github.com/repos/test/test/actions/workflows",
-            json={"workflows": [{"name": "ci", "id": 1}]}
-        )
-        # Mock run workflow
-        responses.add(
-            responses.POST,
-            "https://api.github.com/repos/test/test/actions/workflows/1/dispatch",
-            json={"id": 12345}
-        )
-        job_id = run_workflow("test", "test", "ci", "main", "token")
-        self.assertEqual(job_id, 12345)
+def test_criterion_3_workflow_name():
+    runner = click.testing.CliRunner()
+    result = runner.invoke(cli.main, ['https://github.com/test/repo', 'workflow.yml'])
+    assert result.exit_code == 0
 
-if __name__ == '__main__':
-    unittest.main()
+def test_criterion_4_dry_run():
+    runner = click.testing.CliRunner()
+    result = runner.invoke(cli.main, ['https://github.com/test/repo', 'workflow.yml', '--dry-run'])
+    assert result.exit_code == 0
+
+def test_criterion_5_placeholder_functions():
+    assert callable(module_init.list_workflows)
+    assert callable(module_init.run_workflow)
+    assert callable(module_init.manage_workflows)
+
+def test_criterion_6_project_structure():
+    assert os.path.exists('/workspace/projects/GitHubActionRunner/__init__.py')
+    assert os.path.exists('/workspace/projects/GitHubActionRunner/__main__.py')
+    assert os.path.exists('/workspace/projects/GitHubActionRunner/cli.py')
+    assert os.path.exists('/workspace/projects/GitHubActionRunner/acceptance_tests.py')

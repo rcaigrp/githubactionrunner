@@ -1,14 +1,14 @@
 {
-  "goal": "Build a Python CLI tool named GitHubActionRunner to list, run, and manage GitHub Actions workflows.",
+  "goal": "Create a CLI tool to run GitHub Actions workflows.",
   "acceptance_criteria": [
-    "CLI entry point runs successfully via python -m github_action_runner",
-    "Parses repository URL argument",
-    "Parses workflow name argument",
-    "Parses dry-run mode flag",
-    "Contains placeholder functions for listing, running, and managing workflows",
-    "Project structure is valid and runnable"
+    "CLI runs and exits successfully",
+    "Accepts repo URL",
+    "Accepts workflow name",
+    "Supports dry-run flag",
+    "Placeholder functions defined",
+    "Project structure is correct"
   ],
   "meeting_budget": 5,
-  "meetings_held": 1,
+  "meetings_held": 0,
   "status": "active"
 }

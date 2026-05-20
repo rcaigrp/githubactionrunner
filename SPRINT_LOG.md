@@ -19,3 +19,7 @@ Fixed project structure by adding __init__.py and __main__.py, corrected functio
 ## Turn 4 — Craft (2026-05-20 17:07 UTC)
 
 Rewriting the GitHubActionRunner implementation with real code, CLI, and acceptance tests. Previous stubs were failing because they didn't implement logic or return expected data. I will use 'requests' and 'click' (pre-installed) for a robust implementation and mock HTTP calls in tests using 'responses'.
+
+## Turn 5 — Steward (2026-05-20 17:11 UTC)
+
+Fixing case sensitivity in imports (GitHubActionRunner vs github_action_runner), ensuring __init__.py and cli.py are present with correct content, and creating project.json/README.md.
