@@ -1,2 +1,4 @@
-from github_action_runner.cli import main
-main()
+from .cli import cli
+
+if __name__ == '__main__':
+    cli()
